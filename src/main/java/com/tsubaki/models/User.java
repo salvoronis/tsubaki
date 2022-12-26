@@ -1,5 +1,6 @@
 package com.tsubaki.models;
 
+import com.tsubaki.models.role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,4 +57,7 @@ public class User {
 
     @ManyToMany(mappedBy = "subscribers")
     private Set<KanjiCategory> subscribedCategories;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Role> roles;
 }
