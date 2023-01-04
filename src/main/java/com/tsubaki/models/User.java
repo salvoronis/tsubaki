@@ -5,11 +5,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 import java.util.Set;
 
-import org.hibernate.mapping.List;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.sql.Date;
@@ -21,17 +22,24 @@ import java.sql.Date;
 @NoArgsConstructor
 @EnableJpaAuditing
 public class User {
+
+    public User(String username, String email, String password, Set<Role> roles){
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private Timestamp createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @Column(name = "username")
     private String username;
@@ -43,7 +51,7 @@ public class User {
     private String email;
 
     @Column(name = "settings_id")
-    private long settingsId;
+    private long settingsId; //TODO set null as default
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "settings_id")
