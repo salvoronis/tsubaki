@@ -1,12 +1,10 @@
 package com.tsubaki.models.role;
 
-import com.tsubaki.models.Kanji;
 import com.tsubaki.models.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.Set;
 
@@ -15,7 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@EnableJpaAuditing
 public class Role {
 
     @Id

@@ -11,16 +11,12 @@ import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-
-import java.sql.Date;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-@EnableJpaAuditing
 public class User {
 
     public User(String username, String email, String password, Set<Role> roles){

@@ -7,7 +7,6 @@ import lombok.Setter;
 import java.util.Set;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.sql.Date;
 
@@ -16,7 +15,6 @@ import java.sql.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@EnableJpaAuditing
 public class Kanji {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

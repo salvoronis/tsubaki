@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.sql.Date;
 
@@ -15,7 +14,6 @@ import java.sql.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@EnableJpaAuditing
 public class UserSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
