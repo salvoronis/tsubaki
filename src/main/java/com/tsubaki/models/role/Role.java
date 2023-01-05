@@ -23,10 +23,6 @@ public class Role {
     @Column(length = 20)
     private ERole name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 }

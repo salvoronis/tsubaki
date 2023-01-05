@@ -6,6 +6,8 @@ import com.tsubaki.dto.LoginResponseDto;
 import com.tsubaki.dto.RegisterRequestDto;
 import com.tsubaki.models.User;
 import com.tsubaki.models.role.ERole;
+import com.tsubaki.models.role.Role;
+import com.tsubaki.repositories.RoleRepository;
 import com.tsubaki.repositories.UserRepository;
 import com.tsubaki.security.jwt.JwtUtils;
 import com.tsubaki.security.services.UserDetailsImpl;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -38,6 +41,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @PostMapping("/singin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequestDto) {
@@ -78,11 +84,19 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Email is already in use");
         }
 
+        Set<Role> userRoles = new HashSet<>();
+
+        Role userRole = roleRepository
+                .findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+
+        userRoles.add(userRole);
+
         User user = new User(
                 registerRequestDto.getUsername(),
                 registerRequestDto.getEmail(),
                 encoder.encode(registerRequestDto.getPassword()),
-                new HashSet<>(ERole.ROLE_USER.ordinal()));
+                userRoles);
 
         userRepository.save(user);
 

@@ -62,6 +62,10 @@ public class User {
     @ManyToMany(mappedBy = "subscribers")
     private Set<KanjiCategory> subscribedCategories;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_roles",
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<Role> roles;
 }
