@@ -1,5 +1,10 @@
 package com.tsubaki.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserDto {
 
     private long id;
@@ -7,30 +12,6 @@ public class UserDto {
     private String username;
 
     private String email;
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
 
     public UserDto(long id, String username, String email) {
         this.id = id;

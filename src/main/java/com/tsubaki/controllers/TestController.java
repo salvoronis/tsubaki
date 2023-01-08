@@ -2,7 +2,6 @@ package com.tsubaki.controllers;
 
 import com.tsubaki.converters.UserToUserDto;
 import com.tsubaki.dto.UserDto;
-import com.tsubaki.models.User;
 import com.tsubaki.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,13 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
-public class UserController {
-    private UserRepository userRepository;
+public class TestController {
+    private final UserRepository userRepository;
 
-    private UserToUserDto userToUserDto;
+    private final UserToUserDto userToUserDto;
 
     @Autowired
-    public UserController(
+    public TestController(
             UserRepository userRepository,
             UserToUserDto userToUserDto) {
         this.userRepository = userRepository;
