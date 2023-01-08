@@ -7,6 +7,7 @@ import com.tsubaki.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +20,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/test")
 public class UserController {
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    private UserToUserDto userToUserDto;
 
     @Autowired
-    UserToUserDto userToUserDto;
+    public UserController(
+            UserRepository userRepository,
+            UserToUserDto userToUserDto) {
+        this.userRepository = userRepository;
+        this.userToUserDto = userToUserDto;
+    }
 
     @GetMapping("/test")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         try {
             List<UserDto> users = new ArrayList<>();
