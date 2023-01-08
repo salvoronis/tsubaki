@@ -46,11 +46,7 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "settings_id")
-    private long settingsId; //TODO set null as default
-
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "settings_id")
     private UserSettings settings;
 
     @OneToMany(mappedBy = "createdUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -68,4 +64,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<Role> roles;
+
+    @ManyToMany(mappedBy = "menuUsers")
+    private Set<MenuItem> userMenuItems; // Not include default menu items
+
 }
