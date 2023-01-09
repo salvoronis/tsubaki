@@ -33,11 +33,8 @@ public class MenuItem {
     @Column(name = "is_default")
     private boolean isDefault;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "url")
-    private String url;
+    @OneToOne
+    private Application application;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private MenuItem parentMenuItem;

@@ -34,8 +34,8 @@ public class ToolbarResponseDto {
         children.forEach(
                 item -> result.add(
                         new ToolbarResponseDto(
-                                item.getName(),
-                                item.getUrl(),
+                                item.getApplication() != null ? item.getApplication().getName() : null,
+                                item.getApplication() != null ? item.getApplication().getRedirectionUrl() : null,
                                 item.getSubItems())));
 
         return result;

@@ -10,8 +10,8 @@ public class MenuItemToToolbarResponseDto implements Convertable<MenuItem, Toolb
     @Override
     public ToolbarResponseDto transform(MenuItem src) {
         return new ToolbarResponseDto(
-                src.getName(),
-                src.getUrl(),
+                src.getApplication() != null ? src.getApplication().getName() : null,
+                src.getApplication() != null ? src.getApplication().getRedirectionUrl() : null,
                 src.getSubItems());
     }
 }
