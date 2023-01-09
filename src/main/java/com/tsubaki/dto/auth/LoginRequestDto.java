@@ -1,4 +1,4 @@
-package com.tsubaki.dto;
+package com.tsubaki.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

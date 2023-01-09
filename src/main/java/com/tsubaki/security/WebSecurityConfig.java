@@ -59,7 +59,8 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests(authConfig -> {
                     authConfig.requestMatchers("/api/auth/**").permitAll();
-                    authConfig.requestMatchers("/api/test/**").authenticated(); //TODO check hasAuthority func
+                    authConfig.requestMatchers("/api/test/**").authenticated();
+                    authConfig.requestMatchers("/api/toolbar/**").authenticated();
                 })
                 .formLogin(Customizer.withDefaults()) //TODO read about this
                 .httpBasic(Customizer.withDefaults());

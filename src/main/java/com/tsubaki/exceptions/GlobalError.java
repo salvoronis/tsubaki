@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum GlobalError {
 
     USERNAME_ALREADY_TAKEN("AUTHEX01", 400, "username already taken"),
-    EMAIL_ALREADY_TAKEN("AUTHEX02", 400, "email already taken");
+    EMAIL_ALREADY_TAKEN("AUTHEX02", 400, "email already taken"),
+    NO_SUCH_USER("USEREX01", 400, "no such user");
 
     private final String code;
     private final int status;

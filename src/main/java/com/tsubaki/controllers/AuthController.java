@@ -1,8 +1,8 @@
 package com.tsubaki.controllers;
 
 
-import com.tsubaki.dto.LoginRequestDto;
-import com.tsubaki.dto.RegisterRequestDto;
+import com.tsubaki.dto.auth.LoginRequestDto;
+import com.tsubaki.dto.auth.RegisterRequestDto;
 import com.tsubaki.exceptions.AlreadyTakenException;
 import com.tsubaki.services.auth.AuthService;
 import jakarta.validation.Valid;

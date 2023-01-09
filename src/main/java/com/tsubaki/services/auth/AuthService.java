@@ -1,8 +1,8 @@
 package com.tsubaki.services.auth;
 
-import com.tsubaki.dto.LoginRequestDto;
-import com.tsubaki.dto.LoginResponseDto;
-import com.tsubaki.dto.RegisterRequestDto;
+import com.tsubaki.dto.auth.LoginRequestDto;
+import com.tsubaki.dto.auth.LoginResponseDto;
+import com.tsubaki.dto.auth.RegisterRequestDto;
 import com.tsubaki.exceptions.AlreadyTakenException;
 
 public interface AuthService {
