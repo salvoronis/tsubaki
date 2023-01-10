@@ -11,11 +11,11 @@ import java.sql.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "application")
+@Table(name = "greed_item")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Application {
+public class GreedItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,16 +29,20 @@ public class Application {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "width")
+    private int width;
 
-    @Column(name = "url")
-    private String redirectionUrl;
+    @Column(name = "height")
+    private int height;
 
-    @OneToOne(mappedBy = "application")
-    private MenuItem menuItem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Application application;
 
-    @OneToMany(mappedBy = "application")
-    private Set<GreedItem> greedItems;
+    @ManyToMany
+    @JoinTable(
+            name = "greed_item_user",
+            joinColumns = @JoinColumn(name = "greed_item_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> users;
 
 }

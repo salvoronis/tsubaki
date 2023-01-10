@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                     authConfig.requestMatchers("/api/auth/**").permitAll();
                     authConfig.requestMatchers("/api/test/**").authenticated();
                     authConfig.requestMatchers("/api/toolbar/**").authenticated();
+                    authConfig.requestMatchers("/api/greed/**").authenticated();
                 })
                 .formLogin(Customizer.withDefaults()) //TODO read about this
                 .httpBasic(Customizer.withDefaults());
