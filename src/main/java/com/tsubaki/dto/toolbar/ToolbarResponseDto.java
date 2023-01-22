@@ -1,5 +1,6 @@
 package com.tsubaki.dto.toolbar;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsubaki.models.MenuItem;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class ToolbarResponseDto implements Comparable<ToolbarResponseDto> {
 
     private List<ToolbarResponseDto> children;
 
+    @JsonIgnore
     private int priority;
 
     public ToolbarResponseDto(String name, String redirection_url, Set<MenuItem> children, int priority) {

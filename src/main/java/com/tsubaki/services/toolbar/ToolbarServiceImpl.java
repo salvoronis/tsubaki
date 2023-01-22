@@ -4,7 +4,6 @@ import com.tsubaki.converters.MenuItemToToolbarResponseDto;
 import com.tsubaki.dto.toolbar.ToolbarResponseDto;
 import com.tsubaki.exceptions.GlobalError;
 import com.tsubaki.exceptions.NoSuchUserException;
-import com.tsubaki.models.MenuItem;
 import com.tsubaki.models.User;
 import com.tsubaki.repositories.MenuItemRepository;
 import com.tsubaki.repositories.UserRepository;
@@ -55,7 +54,9 @@ public class ToolbarServiceImpl implements ToolbarService {
                 .forEach(
                         item -> result.add(menuItemToToolbarResponseDto.transform(item)));
 
+        //sort top level
         Collections.sort(result);
+        //sort children
         result.forEach(ToolbarResponseDto::sort);
 
         return result;
