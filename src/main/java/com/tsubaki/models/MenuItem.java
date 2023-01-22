@@ -33,6 +33,9 @@ public class MenuItem {
     @Column(name = "is_default")
     private boolean isDefault;
 
+    @Column(name = "priority")
+    private int priority;
+
     @OneToOne
     private Application application;
 

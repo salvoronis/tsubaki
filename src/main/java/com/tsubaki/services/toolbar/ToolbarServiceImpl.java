@@ -4,6 +4,7 @@ import com.tsubaki.converters.MenuItemToToolbarResponseDto;
 import com.tsubaki.dto.toolbar.ToolbarResponseDto;
 import com.tsubaki.exceptions.GlobalError;
 import com.tsubaki.exceptions.NoSuchUserException;
+import com.tsubaki.models.MenuItem;
 import com.tsubaki.models.User;
 import com.tsubaki.repositories.MenuItemRepository;
 import com.tsubaki.repositories.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +54,9 @@ public class ToolbarServiceImpl implements ToolbarService {
                 .findAllByIsDefaultIs(true)
                 .forEach(
                         item -> result.add(menuItemToToolbarResponseDto.transform(item)));
+
+        Collections.sort(result);
+        result.forEach(ToolbarResponseDto::sort);
 
         return result;
     }
