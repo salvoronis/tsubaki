@@ -1,5 +1,6 @@
-package com.tsubaki.models;
+package com.tsubaki.models.anki;
 
+import com.tsubaki.models.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.sql.Date;
 
 @Entity
-@Table(name = "kanji_category")
+@Table(name = "anki_category", schema = "anki")
 @Getter
 @Setter
 @NoArgsConstructor
-public class KanjiCategory {
+public class AnkiCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -37,7 +38,7 @@ public class KanjiCategory {
 
     @ManyToMany
     @JoinTable(
-            name = "kanji_category_subscribers",
+            name = "anki_category_subscribers", schema = "anki",
             joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> subscribers;
@@ -48,8 +49,8 @@ public class KanjiCategory {
 
     @ManyToMany
     @JoinTable(
-            name = "kanji_category_kanji",
+            name = "anki_category_anki", schema = "anki",
             joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "kanji_id", referencedColumnName = "id"))
-    private Set<Kanji> kanji;
+            inverseJoinColumns = @JoinColumn(name = "anki_id", referencedColumnName = "id"))
+    private Set<Anki> anki;
 }

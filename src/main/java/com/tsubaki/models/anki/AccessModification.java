@@ -1,4 +1,4 @@
-package com.tsubaki.models;
+package com.tsubaki.models.anki;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,13 +8,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Entity
-@Table(name = "user_kanji")
+@Table(name = "access_modification", schema = "anki")
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserKanji {
+public class AccessModification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,20 +28,9 @@ public class UserKanji {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "repeated_times")
-    private int repeatedTimes;
+    @Column(name = "access_type")
+    private String access_type; //TODO rewrite to enum
 
-    @Column(name = "last_repeat_date")
-    private Date lastRepeatDate;
-
-    @Column(name = "already_know")
-    private boolean alreadyKnow;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "kanji_id", nullable = false)
-    private Kanji kanji;
+    @OneToMany(mappedBy = "accessModification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<AnkiCategory> categories;
 }

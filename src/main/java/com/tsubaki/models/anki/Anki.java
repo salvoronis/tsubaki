@@ -1,4 +1,4 @@
-package com.tsubaki.models;
+package com.tsubaki.models.anki;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,11 +11,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.sql.Date;
 
 @Entity
-@Table(name = "kanji")
+@Table(name = "anki", schema = "anki")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Kanji {
+public class Anki {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -28,21 +28,21 @@ public class Kanji {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "kanji")
-    private String kanji;
+    @Column(name = "word")
+    private String word;
 
-    @Column(name = "on_yomi")
-    private String onYomi;
+    @Column(name = "major_transcription")
+    private String majorTranscription;
 
-    @Column(name = "kun_yomi")
-    private String kunYomi;
+    @Column(name = "minor_transcription")
+    private String minorTranscription;
 
-    @Column(name = "example_words")
-    private String examples; // TODO rewrite to another entity
+    @Column(name = "meaning")
+    private String meaning;
 
-    @ManyToMany(mappedBy = "kanji")
-    private Set<KanjiCategory> categories;
+    @ManyToMany(mappedBy = "anki")
+    private Set<AnkiCategory> categories;
 
-    @OneToMany(mappedBy = "kanji", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<UserKanji> learningUsers;
+    @OneToMany(mappedBy = "anki", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<UserAnki> learningUsers;
 }

@@ -1,5 +1,7 @@
 package com.tsubaki.models;
 
+import com.tsubaki.models.anki.AnkiCategory;
+import com.tsubaki.models.anki.UserAnki;
 import com.tsubaki.models.role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -50,13 +52,13 @@ public class User {
     private UserSettings settings;
 
     @OneToMany(mappedBy = "createdUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<KanjiCategory> authoredCategories;
+    private Set<AnkiCategory> authoredCategories;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<UserKanji> learningKanji;
+    private Set<UserAnki> learningKanji;
 
     @ManyToMany(mappedBy = "subscribers")
-    private Set<KanjiCategory> subscribedCategories;
+    private Set<AnkiCategory> subscribedCategories;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

@@ -1,7 +1,7 @@
 package com.tsubaki.repositories;
 
-import com.tsubaki.models.Kanji;
+import com.tsubaki.models.anki.Anki;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface KanjiRepository extends JpaRepository<Kanji, Long> {
+public interface KanjiRepository extends JpaRepository<Anki, Long> {
 }
