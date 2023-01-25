@@ -27,6 +27,6 @@ public class GreedController {
                 .getAuthentication()
                 .getPrincipal();
 
-        return ResponseEntity.ok(greedService.getGreedItems(userDetails.getUsername()));
+        return ResponseEntity.ok(greedService.getGreedItems(userDetails.getId()));
     }
 }

@@ -68,7 +68,7 @@ public class User {
     @ManyToMany(mappedBy = "menuUsers")
     private Set<MenuItem> userMenuItems; // Not include default menu items
 
-    @ManyToMany(mappedBy = "users")
-    private Set<GreedItem> userGreedItems;
+    @OneToMany(mappedBy = "user")
+    private Set<GreedItemUser> usersGreed;
 
 }

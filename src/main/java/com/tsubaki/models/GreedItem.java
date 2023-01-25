@@ -38,11 +38,7 @@ public class GreedItem {
     @ManyToOne(fetch = FetchType.LAZY)
     private Application application;
 
-    @ManyToMany
-    @JoinTable(
-            name = "greed_item_user",
-            joinColumns = @JoinColumn(name = "greed_item_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<User> users;
+    @OneToMany(mappedBy = "greedItem")
+    private Set<GreedItemUser> usersGreed;
 
 }

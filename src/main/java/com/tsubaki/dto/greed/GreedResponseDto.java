@@ -1,10 +1,12 @@
 package com.tsubaki.dto.greed;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class GreedResponseDto {
 
     private String name;
@@ -14,6 +16,10 @@ public class GreedResponseDto {
     private int width;
 
     private int height;
+
+    private int x;
+
+    private int y;
 
     public GreedResponseDto(String name, String redirection_url, int width, int height) {
         this.name = name;
