@@ -4,6 +4,7 @@ import com.tsubaki.converters.MenuItemToToolbarResponseDto;
 import com.tsubaki.dto.toolbar.ToolbarResponseDto;
 import com.tsubaki.exceptions.GlobalError;
 import com.tsubaki.exceptions.NoSuchUserException;
+import com.tsubaki.models.MenuItem;
 import com.tsubaki.models.User;
 import com.tsubaki.repositories.MenuItemRepository;
 import com.tsubaki.repositories.UserRepository;
@@ -41,23 +42,26 @@ public class ToolbarServiceImpl implements ToolbarService {
             throw new NoSuchUserException(GlobalError.NO_SUCH_USER);
         }
 
+        List<MenuItem> userItems = new ArrayList<>();
         List<ToolbarResponseDto> result = new ArrayList<>();
 
         userOptional
                 .get()
                 .getUserMenuItems()
-                .forEach(
-                        item -> result.add(menuItemToToolbarResponseDto.transform(item)));
+                .stream()
+                .filter(item -> !item.isDefault() && item.getParentMenuItem() == null)
+                .forEach(userItems::add);
 
         menuItemRepository
                 .findAllByIsDefaultIs(true)
-                .forEach(
-                        item -> result.add(menuItemToToolbarResponseDto.transform(item)));
+                .stream()
+                .filter(item -> item.getParentMenuItem() == null)
+                .forEach(userItems::add);
 
-        //sort top level
-        Collections.sort(result);
-        //sort children
-        result.forEach(ToolbarResponseDto::sort);
+        userItems.forEach(item -> result.add(menuItemToToolbarResponseDto.transform(item)));
+
+        //sort result
+        ToolbarResponseDto.sort(result);
 
         return result;
     }

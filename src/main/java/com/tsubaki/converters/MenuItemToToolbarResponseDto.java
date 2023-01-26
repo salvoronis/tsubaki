@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 public class MenuItemToToolbarResponseDto implements Convertable<MenuItem, ToolbarResponseDto>{
     @Override
     public ToolbarResponseDto transform(MenuItem src) {
-        return new ToolbarResponseDto(
-                src.getApplication() != null ? src.getApplication().getName() : null,
-                src.getApplication() != null ? src.getApplication().getRedirectionUrl() : null,
-                src.getSubItems(), src.getPriority());
+        return new ToolbarResponseDto(src);
     }
 }

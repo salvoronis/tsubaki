@@ -23,11 +23,20 @@ public class ToolbarResponseDto implements Comparable<ToolbarResponseDto> {
     @JsonIgnore
     private int priority;
 
-    public ToolbarResponseDto(String name, String redirection_url, Set<MenuItem> children, int priority) {
+    public ToolbarResponseDto(String name,
+                              String redirection_url,
+                              Set<MenuItem> children,
+                              int priority) {
         this.name = name;
         this.redirection_url = redirection_url;
         this.children = childrenToToolbarResponseDto(children);
         this.priority = priority;
+    }
+
+    public ToolbarResponseDto(MenuItem src) {
+        this(src.getApplication() != null ? src.getApplication().getName() : null,
+                src.getApplication() != null ? src.getApplication().getRedirectionUrl() : null,
+                src.getSubItems(), src.getPriority());
     }
 
     static private List<ToolbarResponseDto> childrenToToolbarResponseDto(Set<MenuItem> children) {
@@ -40,10 +49,7 @@ public class ToolbarResponseDto implements Comparable<ToolbarResponseDto> {
         children.forEach(
                 item ->
                     result.add(
-                        new ToolbarResponseDto(
-                                item.getApplication() != null ? item.getApplication().getName() : null,
-                                item.getApplication() != null ? item.getApplication().getRedirectionUrl() : null,
-                                item.getSubItems(), item.getPriority())));
+                        new ToolbarResponseDto(item)));
 
         return result;
     }
@@ -56,7 +62,13 @@ public class ToolbarResponseDto implements Comparable<ToolbarResponseDto> {
         return this.priority - o.priority;
     }
 
-    public void sort() {
+    public static void sort(List<ToolbarResponseDto> toolbarResponseDtoList) {
+        Collections.sort(toolbarResponseDtoList);
+        //sort children
+        toolbarResponseDtoList.forEach(ToolbarResponseDto::sort);
+    }
+
+    private void sort() {
         if (this.children.isEmpty()) {
             return;
         }
