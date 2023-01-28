@@ -8,7 +8,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,7 +42,7 @@ public class MenuItem {
     private MenuItem parentMenuItem;
 
     @OneToMany(mappedBy = "parentMenuItem")
-    private Set<MenuItem> subItems = new HashSet<>();
+    private Set<MenuItem> subItems;
 
     @ManyToMany
     @JoinTable(
@@ -51,5 +50,4 @@ public class MenuItem {
             joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> menuUsers;
-
 }

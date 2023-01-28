@@ -8,13 +8,15 @@ import lombok.Setter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 public class ToolbarResponseDto implements Comparable<ToolbarResponseDto> {
 
     private String name;
+
+    @JsonIgnore
+    private long id;
 
     private String redirection_url;
 
@@ -23,35 +25,22 @@ public class ToolbarResponseDto implements Comparable<ToolbarResponseDto> {
     @JsonIgnore
     private int priority;
 
-    public ToolbarResponseDto(String name,
+    public ToolbarResponseDto(long id,
+                              String name,
                               String redirection_url,
-                              Set<MenuItem> children,
                               int priority) {
+        this.id = id;
         this.name = name;
         this.redirection_url = redirection_url;
-        this.children = childrenToToolbarResponseDto(children);
         this.priority = priority;
+        children = new LinkedList<>();
     }
 
     public ToolbarResponseDto(MenuItem src) {
-        this(src.getApplication() != null ? src.getApplication().getName() : null,
+        this(src.getId(),
+                src.getApplication() != null ? src.getApplication().getName() : null,
                 src.getApplication() != null ? src.getApplication().getRedirectionUrl() : null,
-                src.getSubItems(), src.getPriority());
-    }
-
-    static private List<ToolbarResponseDto> childrenToToolbarResponseDto(Set<MenuItem> children) {
-        if (children == null) {
-            return null; //recursion stop condition
-        }
-
-        List<ToolbarResponseDto> result = new LinkedList<>();
-
-        children.forEach(
-                item ->
-                    result.add(
-                        new ToolbarResponseDto(item)));
-
-        return result;
+                src.getPriority());
     }
 
     @Override

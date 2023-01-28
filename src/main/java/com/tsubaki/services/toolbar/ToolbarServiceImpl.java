@@ -11,10 +11,7 @@ import com.tsubaki.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ToolbarServiceImpl implements ToolbarService {
@@ -23,16 +20,12 @@ public class ToolbarServiceImpl implements ToolbarService {
 
     private final MenuItemToToolbarResponseDto menuItemToToolbarResponseDto;
 
-    private final MenuItemRepository menuItemRepository;
-
     @Autowired
     public ToolbarServiceImpl(
             UserRepository userRepository,
-            MenuItemToToolbarResponseDto menuItemToToolbarResponseDto,
-            MenuItemRepository menuItemRepository) {
+            MenuItemToToolbarResponseDto menuItemToToolbarResponseDto) {
         this.userRepository = userRepository;
         this.menuItemToToolbarResponseDto = menuItemToToolbarResponseDto;
-        this.menuItemRepository = menuItemRepository;
     }
 
     public List<ToolbarResponseDto> getMenu(String username) {
@@ -42,23 +35,26 @@ public class ToolbarServiceImpl implements ToolbarService {
             throw new NoSuchUserException(GlobalError.NO_SUCH_USER);
         }
 
-        List<MenuItem> userItems = new ArrayList<>();
         List<ToolbarResponseDto> result = new ArrayList<>();
+        Set<MenuItem> internalOwnedItems = userOptional.get().getUserMenuItems();
 
-        userOptional
-                .get()
-                .getUserMenuItems()
-                .stream()
-                .filter(item -> !item.isDefault() && item.getParentMenuItem() == null)
-                .forEach(userItems::add);
-
-        menuItemRepository
-                .findAllByIsDefaultIs(true)
+        internalOwnedItems
                 .stream()
                 .filter(item -> item.getParentMenuItem() == null)
-                .forEach(userItems::add);
+                .forEach(item -> result.add(menuItemToToolbarResponseDto.transform(item)));
 
-        userItems.forEach(item -> result.add(menuItemToToolbarResponseDto.transform(item)));
+        //serve only two levels in menu
+        internalOwnedItems
+                .stream()
+                .filter(item -> item.getParentMenuItem() != null)
+                .forEach(item -> {
+                    for (ToolbarResponseDto parent : result) {
+                        if (parent.getId() == item.getParentMenuItem().getId()) {
+                            parent.getChildren().add(menuItemToToolbarResponseDto.transform(item));
+                        }
+                    }
+                });
+
 
         //sort result
         ToolbarResponseDto.sort(result);
