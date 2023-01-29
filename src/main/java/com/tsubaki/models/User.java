@@ -2,6 +2,7 @@ package com.tsubaki.models;
 
 import com.tsubaki.models.anki.AnkiCategory;
 import com.tsubaki.models.anki.UserAnki;
+import com.tsubaki.models.gender.Gender;
 import com.tsubaki.models.role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -39,7 +41,7 @@ public class User {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
@@ -48,8 +50,39 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserSettings settings;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "middle_name")
+    private String middleName;
+
+    @Column(name = "preferred_name")
+    private String preferredName;
+
+    @Column(name = "first_name_native")
+    private String firstNameNative;
+
+    @Column(name = "last_name_native")
+    private String lastNameNative;
+
+    @Column(name = "middle_name_native")
+    private String middleNameNative;
+
+    @Column(name = "preferred_name_native")
+    private String preferredNameNative;
+
+    @Comment("path to google cloud picture")
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Gender gender;
+
+    @Column(name = "birth_date")
+    private Timestamp birthDate;
 
     @OneToMany(mappedBy = "createdUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AnkiCategory> authoredCategories;
@@ -72,5 +105,27 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<GreedItemUser> usersGreed;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Country countryOfResidence;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Country birthCountry;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_learning_languages",
+            inverseJoinColumns = @JoinColumn(name = "language_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
+    private Set<Language> learningLanguages;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_known_languages",
+            inverseJoinColumns = @JoinColumn(name = "language_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
+    private Set<Language> knownLanguages;
 
 }

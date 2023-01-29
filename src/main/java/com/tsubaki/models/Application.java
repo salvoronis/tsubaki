@@ -29,10 +29,10 @@ public class Application {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
-    @Column(name = "url")
+    @Column(name = "url", unique = true)
     private String redirectionUrl;
 
     @OneToOne(mappedBy = "application")
