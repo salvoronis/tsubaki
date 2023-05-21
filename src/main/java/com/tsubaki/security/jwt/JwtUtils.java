@@ -6,9 +6,9 @@ import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.Date;
 
 @Component
@@ -21,11 +21,14 @@ public class JwtUtils {
     @Value("${security.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(Authentication authentication) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    @Value("${security.app.jwtExpitationLimitHours}")
+    private int jwtExpirationLimitH;
+
+    public String generateJwtToken(String username) {
+//        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -34,6 +37,20 @@ public class JwtUtils {
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getUserNameFromJwtTokenn(String token) {
+        try {
+            UserDetailsImpl user = (UserDetailsImpl) Jwts
+                    .parserBuilder()
+                    .setSigningKey(jwtSecret)
+                    .build()
+                    .parse(token)
+                    .getBody();
+            return user.getUsername();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        }
     }
 
     public boolean validateJwtToken(String authToken) {
@@ -52,5 +69,17 @@ public class JwtUtils {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
+    }
+
+    public boolean expiredInLimitTime(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
+            // not expired
+            return false;
+        } catch (ExpiredJwtException e) {
+            Date expDate = e.getClaims().getExpiration();
+            Date limitedExpDate = Date.from(expDate.toInstant().plus(Duration.ofHours(jwtExpirationLimitH)));
+            return expDate.before(new Date()) && limitedExpDate.after(new Date());
+        }
     }
 }
