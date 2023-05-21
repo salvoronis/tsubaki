@@ -1,0 +1,46 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  image: docker
+  when: manual
+  allow_failure: false
+  services:
+    - docker:dind
+  variables: # not strictly needed, depending on runner configuration
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  only:
+    - master
+    - develop
+  before_script:
+    - echo $GCR_KEY | docker login -u _json_key --password-stdin https://gcr.io
+  script:
+    - docker build -t gcr.io/tsubaki-376414/back:$CI_COMMIT_SHORT_SHA -f ./devops/docker/Dockerfile .
+    - docker push gcr.io/tsubaki-376414/back:$CI_COMMIT_SHORT_SHA
+  environment: develop
+
+test:
+  stage: test
+  when: on_success
+  script:
+    - echo "This job tests something"
+
+deploy:
+  stage: deploy
+  image: google/cloud-sdk
+  when: on_success
+  before_script:
+    - echo $GCR_KEY > key.json
+    - gcloud auth activate-service-account --key-file=key.json
+    - gcloud config set project tsubaki-376414
+    - gcloud config set container/cluster develop
+    - gcloud config set compute/zone asia-south1-c
+    - gcloud container clusters get-credentials develop --zone europe-west1 --project tsubaki-376414
+    - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" devops/kuber/deployment.yml
+  script:
+    - kubectl apply -f devops/kuber/deployment.yml
+  environment: develop
