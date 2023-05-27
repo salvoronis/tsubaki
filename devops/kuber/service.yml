@@ -7,7 +7,7 @@ spec:
   ports:
     - port: 80
       protocol: TCP
-      targetPort: 5000
+      targetPort: 8080
   selector:
     app: back-end
   type: LoadBalancer
